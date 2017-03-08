@@ -1,0 +1,6 @@
+true: bin_annot, safe_string
+
+"src": include
+"test": include
+
+<test/*.>: include

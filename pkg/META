@@ -1,0 +1,9 @@
+description = "Stream fusion"
+version= "%%VERSION_NUM%%"
+
+requires = ""
+archive(byte) = "fusion.cma"
+archive(native) = "fusion.cmxa"
+plugin(byte) = "fusion.cma"
+plugin(native) = "fusion.cmxs"
+
