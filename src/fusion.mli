@@ -17,4 +17,4 @@ module Stream :
     val take : int -> 'a t -> 'a t
     val skip : int -> 'a t -> 'a t
   end
-module Infix : sig val ( >> ) : 'a -> ('a -> 'b) -> 'b end
+module Infix : sig val ( >> ) : 'a Stream.t -> ('a Stream.t -> 'b) -> 'b end
