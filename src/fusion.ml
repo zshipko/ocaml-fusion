@@ -98,11 +98,11 @@ module Stream = struct
                 | Yield (b, sb') -> Yield (b, (sa, Some (Stream (nextb, sb')))) end
         in Stream (next, (sa0, None))
 
-    let from l fn =
+    let from (fn : unit -> 'b option) : 'b t =
         let rec next = function
             | None -> Done
-            | Some n -> Yield (n, fn n)
-        in Stream (next, Some l)
+            | Some n -> Yield (n, fn ())
+        in Stream (next, fn ())
 
     let push s x = append s (from_list x)
 
@@ -116,14 +116,31 @@ module Stream = struct
         in Stream (next, (n, s))
 
     let skip n s =
-        let np = ref n in
-        filter (fun x ->
-            let xp = !np in
-            let _ = if xp > 0 then
-                np := xp - 1 in
-            xp = 0) s
+        let nn = ref n in
+        filter (fun _ ->
+            let x = !nn in
+            let _ = if x > 0 then
+                nn := x - 1 in
+            x <= 0) s
 end
 
-module Infix = struct
-    let (>>) a b = a |> b
+class ['a] stream init = object(self)
+    val mutable s : 'a Stream.t = init
+    val mutable skipped : int = 0
+
+    method get () = s
+    method to_list () = Stream.to_list s
+    method update x = s <- x
+    method append s' = self#update (Stream.append s s')
+    method push l = self#update (Stream.push s l)
+    method skip n = skipped <- skipped + n; self#update (Stream.skip skipped s)
+    method take n = self#update (Stream.take n s)
+    method map fn = new stream (Stream.map fn s)
+    method filter fn = self#update (Stream.filter fn s)
+    method foldr : 'b . ('a -> 'b -> 'b) -> 'b -> 'b = fun fn x -> Stream.foldr fn x s
+    method foldl : 'b . ('b -> 'a -> 'b) -> 'b -> 'b = fun fn x -> Stream.foldl fn x s
 end
+
+let empty () = new stream (Stream.from_list [])
+let from fn =  new stream (Stream.from fn)
+let from_list l = new stream (Stream.from_list l)

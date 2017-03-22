@@ -1,6 +1,10 @@
 let upto _to =
-    Fusion.Stream.from 0 (fun x ->
-        match x + 1 with
+    let n = ref 0 in
+    let incr () =
+        let x = !n in
+        n := x + 1; x in
+    Fusion.Stream.from (fun () ->
+        match incr () with
         | n when n < _to -> Some n
         | _ -> None)
 

@@ -12,9 +12,27 @@ module Stream :
     val append : 'a t -> 'a t -> 'a t
     val return : 'a -> 'a t
     val concat_map : ('a -> 'b t) -> 'a t -> 'b t
-    val from : 'a -> ('a -> 'a option) -> 'a t
+    val from : (unit -> 'b option) -> 'b t
     val push : 'a t -> 'a list -> 'a t
     val take : int -> 'a t -> 'a t
     val skip : int -> 'a t -> 'a t
   end
-module Infix : sig val ( >> ) : 'a Stream.t -> ('a Stream.t -> 'b) -> 'b end
+class ['a] stream :
+  'a Stream.t ->
+  object
+    val mutable s : 'a Stream.t
+    method append : 'a Stream.t -> unit
+    method filter : ('a -> bool) -> unit
+    method foldl : ('b -> 'a -> 'b) -> 'b -> 'b
+    method foldr : ('a -> 'b -> 'b) -> 'b -> 'b
+    method get : unit -> 'a Stream.t
+    method map : ('a -> 'a) -> 'a stream
+    method push : 'a list -> unit
+    method skip : int -> unit
+    method take : int -> unit
+    method to_list : unit -> 'a list
+    method update : 'a Stream.t -> unit
+  end
+val empty : unit -> 'a stream
+val from : (unit -> 'a option) -> 'a stream
+val from_list : 'a list -> 'a stream
