@@ -1,4 +1,4 @@
-true: bin_annot, safe_string
+true: bin_annot, safe_string, thread, package(threads)
 
 "src": include
 "test": include

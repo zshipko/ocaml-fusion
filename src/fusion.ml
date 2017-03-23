@@ -116,21 +116,19 @@ module Stream = struct
         in Stream (next, (n, s))
 
     let skip n s =
-        let nn = ref n in
-        filter (fun _ ->
-            let x = !nn in
-            let _ = if x > 0 then
-                nn := x - 1 in
-            x <= 0) s
+        let n' = ref 0 in
+        from_list(List.filter (fun _ ->
+            let f = !n' >= n in n' := !n' + 1; f) (to_list s))
 end
 
 class ['a] stream init = object(self)
     val mutable s : 'a Stream.t = init
     val mutable skipped : int = 0
+    val lock : Mutex.t = Mutex.create ()
 
     method get () = s
     method to_list () = Stream.to_list s
-    method update x = s <- x
+    method update x = Mutex.lock lock; s <- x; Mutex.unlock lock
     method append s' = self#update (Stream.append s s')
     method push l = self#update (Stream.push s l)
     method skip n = skipped <- skipped + n; self#update (Stream.skip skipped s)

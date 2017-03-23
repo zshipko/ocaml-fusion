@@ -1,7 +1,7 @@
 description = "Stream fusion"
 version= "%%VERSION_NUM%%"
 
-requires = ""
+requires = "threads"
 archive(byte) = "fusion.cma"
 archive(native) = "fusion.cmxa"
 plugin(byte) = "fusion.cma"
