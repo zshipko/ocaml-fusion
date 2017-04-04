@@ -12,7 +12,7 @@ module Stream :
     val append : 'a t -> 'a t -> 'a t
     val return : 'a -> 'a t
     val concat_map : ('a -> 'b t) -> 'a t -> 'b t
-    val from : (unit -> 'b option) -> 'b t
+    val from : ('a -> 'a option) -> 'a option -> 'a t
     val push : 'a t -> 'a list -> 'a t
     val take : int -> 'a t -> 'a t
     val skip : int -> 'a t -> 'a t
@@ -34,5 +34,5 @@ class ['a] stream :
     method update : 'a Stream.t -> unit
   end
 val empty : unit -> 'a stream
-val from : (unit -> 'a option) -> 'a stream
+val from : ('a -> 'a option) -> 'a option -> 'a stream
 val from_list : 'a list -> 'a stream

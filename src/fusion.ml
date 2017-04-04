@@ -98,11 +98,11 @@ module Stream = struct
                 | Yield (b, sb') -> Yield (b, (sa, Some (Stream (nextb, sb')))) end
         in Stream (next, (sa0, None))
 
-    let from (fn : unit -> 'b option) : 'b t =
+    let from (fn : 'a -> 'a option) b : 'a t =
         let rec next = function
             | None -> Done
-            | Some n -> Yield (n, fn ())
-        in Stream (next, fn ())
+            | Some n -> Yield (n, fn n)
+        in Stream (next, b)
 
     let push s x = append s (from_list x)
 
@@ -139,5 +139,5 @@ class ['a] stream init = object(self)
 end
 
 let empty () = new stream (Stream.from_list [])
-let from fn =  new stream (Stream.from fn)
+let from fn a =  new stream (Stream.from fn a)
 let from_list l = new stream (Stream.from_list l)
