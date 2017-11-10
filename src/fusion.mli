@@ -17,22 +17,3 @@ module Stream :
     val take : int -> 'a t -> 'a t
     val skip : int -> 'a t -> 'a t
   end
-class ['a] stream :
-  'a Stream.t ->
-  object
-    val mutable s : 'a Stream.t
-    method append : 'a Stream.t -> unit
-    method filter : ('a -> bool) -> unit
-    method foldl : ('b -> 'a -> 'b) -> 'b -> 'b
-    method foldr : ('a -> 'b -> 'b) -> 'b -> 'b
-    method get : unit -> 'a Stream.t
-    method map : ('a -> 'a) -> 'a stream
-    method push : 'a list -> unit
-    method skip : int -> unit
-    method take : int -> unit
-    method to_list : unit -> 'a list
-    method update : 'a Stream.t -> unit
-  end
-val empty : unit -> 'a stream
-val from : ('a -> 'a option) -> 'a option -> 'a stream
-val from_list : 'a list -> 'a stream

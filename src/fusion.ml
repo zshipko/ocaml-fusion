@@ -120,24 +120,3 @@ module Stream = struct
         from_list(List.filter (fun _ ->
             let f = !n' >= n in n' := !n' + 1; f) (to_list s))
 end
-
-class ['a] stream init = object(self)
-    val mutable s : 'a Stream.t = init
-    val mutable skipped : int = 0
-
-    method get () = s
-    method to_list () = Stream.to_list s
-    method update x = s <- x
-    method append s' = self#update (Stream.append s s')
-    method push l = self#update (Stream.push s l)
-    method skip n = skipped <- skipped + n; self#update (Stream.skip skipped s)
-    method take n = self#update (Stream.take n s)
-    method map fn = new stream (Stream.map fn s)
-    method filter fn = self#update (Stream.filter fn s)
-    method foldr : 'b . ('a -> 'b -> 'b) -> 'b -> 'b = fun fn x -> Stream.foldr fn x s
-    method foldl : 'b . ('b -> 'a -> 'b) -> 'b -> 'b = fun fn x -> Stream.foldl fn x s
-end
-
-let empty () = new stream (Stream.from_list [])
-let from fn a =  new stream (Stream.from fn a)
-let from_list l = new stream (Stream.from_list l)
