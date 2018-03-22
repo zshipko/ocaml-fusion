@@ -4,12 +4,11 @@ This module implements a stream fusion system based on the following paper: [Str
 
 ## Building
 
-    opam install fusion
+    jbuilder build
 
 ## Testing
 
-    ./pkg/pkg build --tests true
-    ./pkg/pkg test
+    jbuilder runtest
 
 ## Documentation
 
