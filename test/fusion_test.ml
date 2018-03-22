@@ -68,6 +68,22 @@ let test_skip t =
         let s = upto 20 in
         let s = Fusion.Stream.skip 10 s in
         Fusion.Stream.to_list s) [10; 11; 12; 13; 14; 15; 16; 17; 18; 19]
+
+let test_iter t =
+    Test.check t "iter" (fun () ->
+        let x = ref 0 in
+        let s = upto 20 in
+        Fusion.Stream.iter (fun _ ->
+            x := !x + 1) s;
+        !x) 20
+
+let test_add t =
+    Test.check t "add" (fun () ->
+        let i = 99 in
+        let s = upto 10 in
+        Fusion.Stream.add s i
+        |> Fusion.Stream.to_list) [0; 1; 2; 3; 4; 5; 6; 7; 8; 9; 99]
+
 let _ =
     let t = Test.start () in
     let _ = test_from t in
@@ -81,5 +97,7 @@ let _ =
     let _ = test_return t in
     let _ = test_take t in
     let _ = test_skip t in
+    let _ = test_iter t in
+    let _ = test_add t in
     Test.finish t
 

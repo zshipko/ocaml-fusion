@@ -101,6 +101,8 @@ module Stream = struct
             | `False -> Done
         in Stream (next, `True)
 
+    let add s x = append s (return x)
+
     let concat_map fn (Stream (nexta, sa0)) =
         let next = function
             | (sa, None) ->
@@ -141,11 +143,12 @@ module Stream = struct
         let next s =
             match next0 s with
             | Done -> Done
-            | Skip s' -> Skip s'
+            | Skip s' ->
+                n' := !n' + 1;
+                Skip s'
             | Yield (x, s') when !n' = 0 -> Yield (x, s')
             | Yield (x, s') ->
                 n' := !n' - 1;
                 Skip s'
         in Stream (next, s0)
-
 end

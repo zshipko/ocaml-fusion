@@ -32,8 +32,11 @@ module Stream :
     (** Join two streams *)
     val append : 'a t -> 'a t -> 'a t
 
-    (** Create a stream with the given value *)
+    (** Create a stream with the given value as the only item *)
     val return : 'a -> 'a t
+
+    (** Add a single item to the end of the stream *)
+    val add : 'a t -> 'a -> 'a t
 
     (** Concat nested streams *)
     val concat_map : ('a -> 'b t) -> 'a t -> 'b t
