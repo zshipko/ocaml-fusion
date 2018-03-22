@@ -1,5 +1,5 @@
 opam-version: "1.2"
-version: "0.1"
+version: "0.2"
 maintainer: "Zach Shipko <zachshipko@gmail.com>"
 authors: ["Zach Shipko"]
 license: "ISC"
@@ -9,16 +9,13 @@ dev-repo: "https://github.com/zshipko/ocaml-fusion.git"
 doc: "https://github.com/zshipko/ocaml-fusion"
 
 depends: [
-    "ocamlfind" {build}
-    "ocamlbuild" {build}
-    "topkg" {build}
+    "jbuilder" {build}
 ]
 
 build: [[
-    "ocaml" "./pkg/pkg.ml" "build" "--pinned" "%{pinned}%"
+    "jbuilder" "build"
 ]]
 
-build-test: [
-    [ "ocaml" "pkg/pkg.ml" "build" "--pinned" "%{pinned}%" "--tests" "true" ]
-    [ "ocaml" "pkg/pkg.ml" "test" ]
-]
+build-test: [[
+    "jbuilder" "runtest"
+]]

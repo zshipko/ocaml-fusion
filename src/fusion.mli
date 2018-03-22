@@ -4,6 +4,7 @@ module Stream :
     type 'a t = Stream : (('s -> ('a, 's) step) * 's) -> 'a t
     val from_list : 'a list -> 'a t
     val to_list : 'a t -> 'a list
+    val iter : ('a -> unit) -> 'a t -> unit
     val map : ('a -> 'b) -> 'a t -> 'b t
     val filter : ('a -> bool) -> 'a t -> 'a t
     val foldr : ('a -> 'b -> 'b) -> 'b -> 'a t -> 'b

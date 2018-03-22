@@ -1,0 +1,10 @@
+(jbuild_version 1)
+
+(executables
+((names (fusion_test))
+ (libraries (fusion))))
+
+(alias
+ ((name    runtest)
+  (deps    (fusion_test.exe))
+  (action  (run ${<}))))
